@@ -126,3 +126,6 @@ class Client:
         answer = self.driver.find_elements(By.CLASS_NAME, 'text-base')[-1]
 
         return answer.text
+
+    def __del__(self):
+        self.driver.quit()
