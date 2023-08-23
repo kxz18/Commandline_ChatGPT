@@ -59,6 +59,9 @@ class Client:
         self.login_url = 'https://chat.openai.com/auth/login'
         self.delay = 5 # 5 seconds delay
 
+        # login
+        self.login()
+
     def login(self):
         self.driver.get(self.login_url)
         sleep(self.delay)
