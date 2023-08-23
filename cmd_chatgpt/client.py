@@ -73,7 +73,24 @@ class Client:
         sleep(self.delay)
         logging.info('Login button clicked')
 
-        if self.login_type == 'Microsoft':
+        if self.login_type == '':
+            # enter account
+            input_account = find_input(self.driver, 'text')
+            input_account.send_keys(self.username)
+            submit_button = find_button(self.driver, 'Continue')
+            submit_button.click()
+            sleep(self.delay)
+            logging.info('Accound entered')
+
+            # enter password
+            input_password = find_input(self.driver, 'password')
+            input_password.send_keys(self.password)
+            submit_button = find_button(self.driver, 'Continue')
+            submit_button.click()
+            sleep(self.delay)
+            logging.info('Password entered')
+
+        elif self.login_type == 'Microsoft':
             login_button = find_button(self.driver, 'Continue with Microsoft Account')
             login_button.click()
             sleep(self.delay)
