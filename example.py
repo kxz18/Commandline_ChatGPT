@@ -19,4 +19,4 @@ while True:
         break
 
     response = client.say(user_input)
-    print('ChatGPT:', response)
+    print('AI:', response)

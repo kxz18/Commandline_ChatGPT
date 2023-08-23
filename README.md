@@ -23,6 +23,12 @@ client = Client(
 print(client.say('Hello World!'))
 ```
 
+You can also try the command line interactive demo by:
+
+```bash
+python example.py
+```
+
 Currently supported driver type:
   - firefox
 
