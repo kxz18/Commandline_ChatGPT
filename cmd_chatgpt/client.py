@@ -3,6 +3,7 @@
 import logging
 from time import sleep
 
+import selenium.common.exceptions as Exceptions
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.firefox.service import Service
@@ -120,12 +121,14 @@ class Client:
         text_area.send_keys(Keys.RETURN)
         logging.info(f'Text "{text}" sent!')
 
-        while True:
-            sleep(1)
-            wait_elem = self.driver.find_elements(By.CLASS_NAME, 'text-2xl')
-            if len(wait_elem) == 0:
-                break
-        logging.info('Answer ready!')
+        try:
+            WebDriverWait(self.driver, 15).until_not(
+                    EC.presence_of_element_located(
+                        (By.CLASS_NAME, 'text-2xl')))
+            logging.info('Answer ready!')
+        except Exceptions.TimeoutException:
+            logging.error('Stuck, something wrong')
+
         answer = self.driver.find_elements(By.CLASS_NAME, 'text-base')[-1]
 
         return answer.text
