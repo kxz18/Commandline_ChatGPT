@@ -1,7 +1,7 @@
 # Requirements
 
 ```bash
-pip install selenium
+pip install -r requirements.txt
 ```
 
 # Example
@@ -16,8 +16,10 @@ client = Client(
     username=YOUR_USERNAME,
     password=YOUR_PASSWORD,
     driver_path='/path/to/your/driver',
-    driver_type='firefox',
-    login_type='Microsoft'
+	browser_path=None,  # or specify binary executable file of the browser
+    driver_type='chrome',
+    login_type='Microsoft',
+    proxy_server=None # e.g. 'socks5://ip:port'
 )
 
 print(client.say('Hello World!'))
@@ -30,7 +32,13 @@ python example.py
 ```
 
 Currently supported driver type:
-  - firefox
+  - 'firefox': Firefox, needs [geckodriver](https://github.com/mozilla/geckodriver/releases).
+  - 'chrome': Google chrome, needs [chromedriver](https://chromedriver.chromium.org/downloads).
 
 Currently supported login type:
-  - Microsoft
+  - '': Normal OpenAI account
+  - 'Microsoft': Microsoft account
+
+# Acknowlegement
+
+The open-source project [ChatGPT_Automation](https://github.com/ugorsahin/ChatGPT_Automation) helps a lot!
