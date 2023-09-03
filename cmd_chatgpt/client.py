@@ -4,6 +4,7 @@ import os
 import logging
 from time import sleep
 from random import random
+from typing import Optional
 
 import undetected_chromedriver as uc
 import selenium.common.exceptions as Exceptions
@@ -12,6 +13,8 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.firefox.service import Service
+from selenium.webdriver.common.proxy import Proxy, ProxyType
 
 from .helpers import detect_chrome_version
 
@@ -48,8 +51,10 @@ class Client:
             username: str,
             password: str,
             driver_path: str,
+            browser_path: Optional[str]=None,
             driver_type: str='firefox',
             login_type: str='',
+            proxy_server: Optional[str]=None
             ) -> None:
         
         self.username = username
@@ -67,27 +72,47 @@ class Client:
         options.add_argument('--incognito')
         # headless browser
         options.add_argument('--headless')
+        # proxy
+        if proxy_server is not None:
+            logging.info(f'Using proxy {proxy_server}')
 
         # initialize selenium webdriver
         if driver_type == 'firefox':
             # add complete header to bypass cloudflare bot check
             options.add_argument('--user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:109.0) Gecko/20100101 Firefox/117.0')
-            service = webdriver.firefox.service.Service(executable_path=driver_path)
-            self.driver = webdriver.Firefox(service=service, options=options)
+            service = Service(executable_path=driver_path)
+            profile = webdriver.FirefoxProfile()
+            protocol, host = proxy_server.split('://')
+            ip, port = host.split(':')
+            if protocol == 'socks5':
+                prefix = 'socks'
+            elif protocol == 'http':
+                prefix = 'http'
+            else:
+                raise NotImplementedError(f'Proxy protocol {protocol} not implemented')
+            profile.set_preference('network.proxy.type', 1)
+            profile.set_preference(f'network.proxy.{prefix}', ip)
+            profile.set_preference(f'network.proxy.{prefix}_port', int(port))
+            self.driver = webdriver.Firefox(
+                    service=service,
+                    options=options,
+                    firefox_profile=profile)
         elif driver_type == 'chrome':
+            if proxy_server is not None:
+                options.add_argument(f'--proxy-server={proxy_server}')
             self.driver = uc.Chrome(
                 driver_executable_path=driver_path,
+                browser_executable_path=browser_path,
                 options=options,
                 headless=True,
-                version_main=detect_chrome_version(),
+                version_main=detect_chrome_version(browser_path),
                 log_level=10,
             )
             self.driver.set_page_load_timeout(15)
             random_delay(1)
-
+        
         # constants
-        # self.login_url = 'https://chat.openai.com/auth/login'
-        self.login_url = 'https://chat.openai.com/auth/login?next=/chat'
+        self.login_url = 'https://chat.openai.com/auth/login'
         self.delay = 5 # 5 seconds delay
 
         # login
@@ -104,7 +129,7 @@ class Client:
         random_delay(self.delay)
         logging.info('Login button clicked')
 
-        self.wait_verification()
+        # self.wait_verification()
 
         if self.login_type == '':
             # enter account
@@ -161,6 +186,8 @@ class Client:
         logging.info('Log in successfully!')
 
     def wait_verification(self):
+
+        # WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR, 'div.content')))
 
         def check_login_page():
             login_button = self.driver.find_elements(By.XPATH, '//button[//div[text()="Log in"]]')

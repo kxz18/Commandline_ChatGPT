@@ -8,9 +8,11 @@ YOUR_PASSWORD = ''
 client = Client(
     username=YOUR_USERNAME,
     password=YOUR_PASSWORD,
-    driver_path='/path/to/your/driver',
-    driver_type='firefox',
-    login_type='Microsoft'
+    driver_path='/path/to/webdriver',
+    browser_path=None,  # or specify binary executable file of the browser
+    driver_type='chrome',
+    login_type='Microsoft',
+    proxy_server=None, # e.g. 'socks5://ip:port'
 )
 
 while True:
