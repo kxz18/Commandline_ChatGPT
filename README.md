@@ -32,12 +32,12 @@ python example.py
 ```
 
 Currently supported driver type:
-  - 'firefox': Firefox, needs [geckodriver](https://github.com/mozilla/geckodriver/releases).
-  - 'chrome': Google chrome, needs [chromedriver](https://chromedriver.chromium.org/downloads).
+  - "firefox": Firefox, needs [geckodriver](https://github.com/mozilla/geckodriver/releases).
+  - "chrome": Google chrome, needs [chromedriver](https://chromedriver.chromium.org/downloads).
 
 Currently supported login type:
-  - '': Normal OpenAI account
-  - 'Microsoft': Microsoft account
+  - "": Normal OpenAI account
+  - "Microsoft": Microsoft account
 
 # Acknowlegement
 
