@@ -39,6 +39,6 @@ Currently supported login type:
   - "": Normal OpenAI account
   - "Microsoft": Microsoft account
 
-# Acknowlegement
+# Acknowledgement
 
 The open-source project [ChatGPT_Automation](https://github.com/ugorsahin/ChatGPT_Automation) helps a lot!
