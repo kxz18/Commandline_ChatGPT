@@ -215,7 +215,7 @@ class Client:
         logging.info(f'Text "{text}" sent!')
 
         try:
-            WebDriverWait(self.driver, 15).until_not(
+            WebDriverWait(self.driver, 30).until_not(
                     EC.presence_of_element_located(
                         (By.CLASS_NAME, 'text-2xl')))
             logging.info('Answer ready!')
